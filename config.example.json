@@ -1,0 +1,16 @@
+{
+  "travelpayouts_token": "YOUR_TRAVELPAYOUTS_TOKEN",
+  "routes": [
+    {"origin": "MSQ", "destination": "AYT"},
+    {"origin": "MOW", "destination": "AYT"}
+  ],
+  "months": ["2027-05"],
+  "max_price": 30000,
+  "currency": "rub",
+  "one_way": false,
+  "direct_only": true,
+  "trip_duration": 13,
+  "check_interval_minutes": 60,
+  "telegram_token": "YOUR_TELEGRAM_BOT_TOKEN",
+  "telegram_chat_id": "YOUR_TELEGRAM_CHAT_ID"
+}
