@@ -70,12 +70,25 @@ def month_param(month: str) -> str:
     return month
 
 
-def aviasales_search_url(origin: str, destination: str, depart_date: str, one_way: bool) -> str:
-    """Ссылка на поиск Aviasales: /search/MSQ1209AYT1"""
-    dt = datetime.strptime(depart_date, "%Y-%m-%d")
-    date_part = dt.strftime("%d%m")
+def aviasales_date_part(date_str: str) -> str:
+    """2027-04-28 → 2804"""
+    return datetime.strptime(date_str, "%Y-%m-%d").strftime("%d%m")
+
+
+def aviasales_search_url(
+    origin: str,
+    destination: str,
+    depart_date: str,
+    return_date: str | None,
+    one_way: bool,
+) -> str:
+    """Ссылка на поиск Aviasales: /search/MOW2804CTU11051"""
+    depart_part = aviasales_date_part(depart_date)
     passengers = "1"
-    return f"https://www.aviasales.ru/search/{origin}{date_part}{destination}{passengers}"
+    if not one_way and return_date:
+        return_part = aviasales_date_part(return_date)
+        return f"https://www.aviasales.ru/search/{origin}{depart_part}{destination}{return_part}{passengers}"
+    return f"https://www.aviasales.ru/search/{origin}{depart_part}{destination}{passengers}"
 
 
 def fetch_prices(
@@ -164,7 +177,7 @@ def format_deal_message(
     depart = item.get("depart_date", "?")
     return_date = item.get("return_date")
     changes = format_changes(item.get("number_of_changes"))
-    url = aviasales_search_url(origin, destination, depart, one_way)
+    url = aviasales_search_url(origin, destination, depart, return_date, one_way)
     currency_label = currency.upper()
 
     lines = [
